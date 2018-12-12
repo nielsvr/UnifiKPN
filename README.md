@@ -59,6 +59,12 @@ Reprovision or restart the USG. If this does not fix it run `sudo igmpproxy rest
 #### TV signal suddenly gone
 KPN probably changes the IP of your local TV router. Follow the steps at 'get the IPTV router' again.
 
+#### No internet or response from the USG
+Make sure you have a Unifi USG 3P. The ports we are matching in the JSON correlate to this model. The other USG models have other ports and you probably should change the JSON for the right ports.
+
+#### Anything else or still not working
+Restart everything. The USG, the FTTH modem, your Switches and Controller... and try it all again if it still doesn't work.
+
 #### Something else...
 I've probably spend over 12 hrs to get it stable. Run a lot of configs, reprovisionings and factory reset. It's part of the proces and it helps you to understand what is happening. There is no 'plug and play' solution for this... But here are some handy (dutch) links for help and reference:
 
