@@ -1,155 +1,212 @@
-{
-    "interfaces": {
-        "ethernet": {
-            "eth0": {
-                "dhcp-options": {
-                    "default-route": "no-update",
-                    "default-route-distance": "1",
-                    "name-server": "no-update"
-                },
-                "vif": {
-                    "4": {
-                        "address": [
-                            "dhcp"
-                        ],
-                        "description": "WAN",
-                        "dhcp-options": {
-                            "client-option": [
-                                "send vendor-class-identifier &quot;IPTV_RG&quot;;",
-                                "request subnet-mask, routers, rfc3442-classless-static-routes;"
-                            ],
-                            "default-route": "no-update",
-                            "default-route-distance": "210",
-                            "name-server": "no-update"
+{  
+   "interfaces":{  
+      "ethernet":{  
+         "eth0":{  
+            "description":"eth0 - FTTH",
+            "duplex":"auto",
+            "speed":"auto",
+            "vif":{  
+               "4":{  
+                  "address":[  
+                     "dhcp"
+                  ],
+                  "description":"eth0.4 - IPTV",
+                  "dhcp-options":{  
+                     "client-option":[  
+                        "send vendor-class-identifier &quot;IPTV_RG&quot;;",
+                        "request subnet-mask, routers, rfc3442-classless-static-routes;"
+                     ],
+                     "default-route":"no-update",
+                     "default-route-distance":"210",
+                     "name-server":"update"
+                  },
+                  "ip":{  
+                     "source-validation":"loose"
+                  }
+               },
+               "6":{  
+                  "description":"eth0.6 - Internet",
+                  "firewall":{  
+                     "in":{  
+                        "name":"WAN_IN"
+                     },
+                     "local":{  
+                        "name":"WAN_LOCAL"
+                     },
+                     "out":{  
+                        "name":"WAN_OUT"
+                     }
+                  },
+                  "pppoe":{  
+                     "2":{  
+                        "default-route":"auto",
+                        "firewall":{  
+                           "in":{  
+                              "name":"WAN_IN"
+                           },
+                           "local":{  
+                              "name":"WAN_LOCAL"
+                           },
+                           "out":{  
+                              "name":"WAN_OUT"
+                           }
                         },
-                        "ip": {
-                            "source-validation": "loose"
-                        }
-                    },
-                    "6": {
-                        "description": "WAN",
-                        "firewall": {
-                            "in": {
-                                "ipv6-name": "WANv6_IN",
-                                "name": "WAN_IN"
-                            },
-                            "local": {
-                                "ipv6-name": "WANv6_LOCAL",
-                                "name": "WAN_LOCAL"
-                            },
-                            "out": {
-                                "ipv6-name": "WANv6_OUT",
-                                "name": "WAN_OUT"
-                            }
-                        },
-                        "pppoe": {
-                            "2": {
-                                "default-route": "auto",
-                                "firewall": {
-                                    "in": {
-                                        "ipv6-name": "WANv6_IN",
-                                        "name": "WAN_IN"
-                                    },
-                                    "local": {
-                                        "ipv6-name": "WANv6_LOCAL",
-                                        "name": "WAN_LOCAL"
-                                    },
-                                    "out": {
-                                        "ipv6-name": "WANv6_OUT",
-                                        "name": "WAN_OUT"
-                                    }
-                                },
-                                "name-server": "auto",
-                                "password": "kpn",
-                                "user-id": "kpn"
-                            }
-                        }
-                    }
-                }
+                        "mtu":"1492",
+                        "name-server":"none",
+                        "password":"kpn",
+                        "user-id":"kpn"
+                     }
+                  }
+               }
             }
-        }
-    },
-    "protocols": {
-        "igmp-proxy": {
-            "interface": {
-                "eth0.4": {
-                    "alt-subnet": [
-                        "0.0.0.0/0"
-                    ],
-                    "role": "upstream",
-                    "threshold": "1"
-                },
-                "eth1": {
-                    "alt-subnet": [
-                        "0.0.0.0/24"
-                    ],
-                    "role": "downstream",
-                    "threshold": "1"
-                }
+         },
+         "eth1":{  
+            "description":"eth1 - LAN",
+            "address":[  
+               "192.168.1.1/24"
+            ],
+            "duplex":"auto",
+            "firewall":{  
+               "in":{  
+                  "name":"LAN_IN"
+               },
+               "local":{  
+                  "name":"LAN_LOCAL"
+               },
+               "out":{  
+                  "name":"LAN_OUT"
+               }
+            },
+            "speed":"auto"
+         },
+         "eth2":{  
+            "disable":"''",
+            "duplex":"auto",
+            "speed":"auto"
+         }
+      },
+      "loopback":{  
+         "lo":"''"
+      }
+   },
+   "protocols":{  
+      "igmp-proxy":{  
+         "disable-quickleave":"''",
+         "interface":{  
+            "eth0":{  
+               "role":"disabled",
+               "threshold":"1"
+            },
+            "eth0.4":{  
+               "alt-subnet":[  
+                  "0.0.0.0/0"
+               ],
+               "role":"upstream",
+               "threshold":"1"
+            },
+            "eth1":{  
+               "alt-subnet":[  
+                  "0.0.0.0/0"
+               ],
+               "role":"downstream",
+               "threshold":"1"
+            },
+            "pppoe2":{  
+               "role":"disabled",
+               "threshold":"1"
             }
-        },
-        "static": {
-            "route": {
-                "213.75.112.0/21": {
-                    "next-hop": {
-                        "10.203.0.1": "''"
-                    }
-                }
+         }
+      },
+      "static":{  
+         "interface-route":{  
+            "0.0.0.0/0":{  
+               "next-hop-interface":{  
+                  "pppoe2":{  
+                     "distance":"1"
+                  }
+               }
             }
-        }
-    },
-    "port-forward": {
-        "wan-interface": "pppoe2"
-    },
-
-    "service": {
-        "dns": {
-            "forwarding": {
-                "except-interface": [
-                    "pppoe2"
-                ]
+         },
+         "route":{  
+            "213.75.112.0/21":{  
+               "next-hop":{  
+                  "10.213.96.1":"''"
+               }
             }
-        },
-        "nat": {
-            "rule": {
-                "5000": {
-                    "description": "MASQ corporate_network to IPTV network",
-                    "destination": {
-                        "address": "213.75.112.0/21"
-                    },
-                    "log": "disable",
-                    "outbound-interface": "eth0.4",
-                    "protocol": "all",
-                    "type": "masquerade"
-                },
-                "6001": {
-                    "outbound-interface": "pppoe2"
-                },
-                "6002": {
-                    "outbound-interface": "pppoe2"
-                },
-                "6003": {
-                    "outbound-interface": "pppoe2"
-                }
+         }
+      }
+   },
+   "port-forward":{  
+      "auto-firewall":"enable",
+      "hairpin-nat":"enable",
+      "lan-interface":[  
+         "eth1"
+      ],
+      "wan-interface":"pppoe2"
+   },
+   "service":{  
+      "dns":{  
+         "forwarding":{  
+            "except-interface":[  
+               "pppoe2"
+            ]
+         }
+      },
+      "nat":{  
+         "rule":{  
+            "5000":{  
+               "description":"MASQ corporate_network to IPTV network",
+               "destination":{  
+                  "address":"213.75.112.0/21"
+               },
+               "log":"disable",
+               "outbound-interface":"eth0.4",
+               "protocol":"all",
+               "type":"masquerade"
+            },
+            "6001":{  
+               "description":"MASQ corporate_network to WAN",
+               "log":"disable",
+               "outbound-interface":"pppoe2",
+               "protocol":"all",
+               "source":{  
+                  "group":{  
+                     "network-group":"corporate_network"
+                  }
+               },
+               "type":"masquerade"
+            },
+            "6002":{  
+               "description":"MASQ remote_user_vpn_network to WAN",
+               "log":"disable",
+               "outbound-interface":"pppoe2",
+               "protocol":"all",
+               "source":{  
+                  "group":{  
+                     "network-group":"remote_user_vpn_network"
+                  }
+               },
+               "type":"masquerade"
+            },
+            "6003":{  
+               "description":"MASQ guest_network to WAN",
+               "log":"disable",
+               "outbound-interface":"pppoe2",
+               "protocol":"all",
+               "source":{  
+                  "group":{  
+                     "network-group":"guest_network"
+                  }
+               },
+               "type":"masquerade"
             }
-        }
-
-    },
-    
-    "system": {
-        "name-server": [
-            "1.1.1.1",
-            "1.0.0.1"
-        ]
-    },
-    
-    "vpn": {
-        "ipsec": {
-            "ipsec-interfaces": {
-                "interface": [
-                    "pppoe2"
-                ]
-            }
-        }
-    }
+         }
+      }
+   },
+   "system":{  
+      "name-server":[  
+         "1.1.1.1",
+         "1.0.0.1"
+      ]
+   }
 }
